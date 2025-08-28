@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
+import Header from "./components/Header"; 
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ChefRegister from "./pages/ChefRegister";
 import Home from "./pages/Home";   
-import Header from "./components/Header"; 
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/chef-register" element={<ChefRegister />} />
       </Routes>
+      <Footer />
     </>
   );
 }

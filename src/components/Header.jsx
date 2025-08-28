@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, User } from "lucide-react";
+import { ChefHat, Menu, X, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Header() {
@@ -10,22 +10,24 @@ export default function Header() {
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          {/* Logo */}
-          <div className="text-2xl font-bold text-orange-600">Rasoi</div>
+          {/* Logo (left) */}
+          <div className="flex items-center space-x-2">
+            <ChefHat className="h-8 w-8 text-orange-500" />
+            <span className="text-xl font-bold text-foreground">HomeChef</span>
+          </div>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex space-x-8 items-center">
+          {/* Center Links */}
+          <div className="hidden md:flex space-x-8">
             <Link to="/" className="text-gray-700 hover:text-orange-600">
               Home
-            </Link>
-            <Link to="/about" className="text-gray-700 hover:text-orange-600">
-              About
             </Link>
             <Link to="/services" className="text-gray-700 hover:text-orange-600">
               Services
             </Link>
+          </div>
 
-            {/* Sign In / Chef CTA buttons */}
+          {/* Right CTA buttons */}
+          <div className="hidden md:flex space-x-4">
             <Link
               to="/login"
               className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition"
@@ -40,7 +42,7 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* Profile (mobile only) + Menu Button */}
+          {/* Mobile only: Profile + Menu */}
           <div className="flex items-center gap-4 md:hidden">
             {/* Profile Button */}
             <div className="relative">
@@ -51,7 +53,6 @@ export default function Header() {
                 <User size={20} />
               </button>
 
-              {/* Dropdown Menu */}
               {profileOpen && (
                 <div className="absolute right-0 mt-2 w-44 bg-white border rounded-lg shadow-md">
                   <Link
@@ -72,7 +73,7 @@ export default function Header() {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-700 hover:text-orange-600"
@@ -83,7 +84,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Links */}
+      {/* Mobile Dropdown */}
       {isOpen && (
         <div className="md:hidden bg-white px-4 pb-4 space-y-2 shadow-md">
           <Link
@@ -94,21 +95,12 @@ export default function Header() {
             Home
           </Link>
           <Link
-            to="/about"
-            className="block text-gray-700 hover:text-orange-600"
-            onClick={() => setIsOpen(false)}
-          >
-            About
-          </Link>
-          <Link
             to="/services"
             className="block text-gray-700 hover:text-orange-600"
             onClick={() => setIsOpen(false)}
           >
             Services
           </Link>
-
-          {/* Sign In / Chef CTA in Mobile */}
           <Link
             to="/login"
             className="block bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition text-center"
