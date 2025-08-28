@@ -7,12 +7,14 @@ import {
 } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import UserDashboard from "./pages/UserDashboard";
+import ChefDashboard from "./pages/ChefDashboard";
 import authAPI from "./api/auth";
 import { Loader2 } from "lucide-react";
 
-
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, requiredRole }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,11 +26,13 @@ const ProtectedRoute = ({ children }) => {
 
         if (isMounted) {
           setIsAuthenticated(result.success);
+          setUser(result.user);
         }
       } catch (error) {
         console.error("ProtectedRoute authentication error:", error);
         if (isMounted) {
           setIsAuthenticated(false);
+          setUser(null);
         }
       } finally {
         if (isMounted) {
@@ -72,6 +76,14 @@ const ProtectedRoute = ({ children }) => {
       />
     );
   }
+
+  // Role-based redirection
+  if (requiredRole && user && user.role !== requiredRole) {
+    const redirectPath =
+      user.role === "chef" ? "/chef-dashboard" : "/user-dashboard";
+    return <Navigate to={redirectPath} replace />;
+  }
+
   return children;
 };
 
@@ -104,9 +116,29 @@ const App = () => {
       <div className="App">
         <Routes>
           {/* Public Routes */}
+          <Route path="/" element={<UserDashboard />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<RegisterPage />} />
+
+          {/* Protected Dashboard Routes */}
+          <Route
+            path="/user-dashboard"
+            element={
+              <ProtectedRoute requiredRole="user">
+                <UserDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chef-dashboard"
+            element={
+              <ProtectedRoute requiredRole="chef">
+                <ChefDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* 404 Page */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

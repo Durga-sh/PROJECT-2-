@@ -32,7 +32,9 @@ const LoginPage = () => {
         const result = await authAPI.getCurrentUser();
         console.log("LoginPage checkAuthStatus result:", result);
         if (result.success) {
-          const from = location.state?.from?.pathname || "/leads";
+          const defaultRedirect =
+            result.user.role === "chef" ? "/chef-dashboard" : "/user-dashboard";
+          const from = location.state?.from?.pathname || defaultRedirect;
           console.log("User already authenticated, redirecting to:", from);
           navigate(from, { replace: true });
         }
@@ -65,7 +67,15 @@ const LoginPage = () => {
 
       if (result.success) {
         setMessage(result.message);
-        const redirectPath = location.state?.from?.pathname || "/leads";
+
+        // Get user info for role-based redirection
+        const userResult = await authAPI.getCurrentUser();
+        const defaultRedirect =
+          userResult.user?.role === "chef"
+            ? "/chef-dashboard"
+            : "/user-dashboard";
+        const redirectPath = location.state?.from?.pathname || defaultRedirect;
+
         const verifyAndRedirect = async (attempt = 1, maxAttempts = 5) => {
           try {
             console.log(`Verification attempt ${attempt}/${maxAttempts}`);

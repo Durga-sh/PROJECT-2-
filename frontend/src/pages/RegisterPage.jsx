@@ -8,6 +8,8 @@ import {
   CheckCircle,
   XCircle,
   Loader2,
+  Users,
+  ChefHat,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import authAPI from "../api/auth";
@@ -19,6 +21,7 @@ const RegisterPage = () => {
     name: "",
     email: "",
     password: "",
+    role: "user",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -33,7 +36,10 @@ const RegisterPage = () => {
     try {
       const result = await authAPI.getCurrentUser();
       if (result.success) {
-        navigate("/leads", { replace: true });
+        // Redirect based on user role
+        const redirectPath =
+          result.user.role === "chef" ? "/chef-dashboard" : "/user-dashboard";
+        navigate(redirectPath, { replace: true });
       }
     } catch (error) {
       console.log("User not authenticated" + error);
@@ -62,7 +68,10 @@ const RegisterPage = () => {
       if (result.success) {
         setMessage(result.message);
         setTimeout(() => {
-          navigate("/leads", { replace: true });
+          // Redirect based on user role
+          const redirectPath =
+            result.user.role === "chef" ? "/chef-dashboard" : "/user-dashboard";
+          navigate(redirectPath, { replace: true });
         }, 1000);
       } else {
         if (result.errors) {
@@ -105,7 +114,10 @@ const RegisterPage = () => {
   const strengthLabels = ["Weak", "Fair", "Good", "Strong"];
 
   const isFormValid =
-    formData.name.trim() && formData.email.trim() && formData.password.trim();
+    formData.name.trim() &&
+    formData.email.trim() &&
+    formData.password.trim() &&
+    formData.role;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-800 flex items-center justify-center p-4">
@@ -178,6 +190,50 @@ const RegisterPage = () => {
                   placeholder="Enter your email"
                   required
                 />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Account Type
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({ ...prev, role: "user" }))
+                  }
+                  disabled={loading}
+                  className={`p-3 rounded-lg border-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+                    formData.role === "user"
+                      ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                      : "border-gray-300 bg-white text-gray-700 hover:border-emerald-300"
+                  }`}
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <Users className="w-6 h-6" />
+                    <span className="font-medium">User</span>
+                    <span className="text-xs">Browse & Order</span>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({ ...prev, role: "chef" }))
+                  }
+                  disabled={loading}
+                  className={`p-3 rounded-lg border-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+                    formData.role === "chef"
+                      ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                      : "border-gray-300 bg-white text-gray-700 hover:border-emerald-300"
+                  }`}
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <ChefHat className="w-6 h-6" />
+                    <span className="font-medium">Chef</span>
+                    <span className="text-xs">Sell Food</span>
+                  </div>
+                </button>
               </div>
             </div>
 

@@ -64,7 +64,7 @@ class AuthController {
     res.clearCookie("refreshToken", cookieOptions);
   }
 
-  validateRegistration({ name, email, password }) {
+  validateRegistration({ name, email, password, role }) {
     const errors = [];
 
     if (!name || name.trim().length === 0) {
@@ -98,6 +98,10 @@ class AuthController {
       }
     }
 
+    if (role && !["user", "chef"].includes(role)) {
+      errors.push("Role must be either 'user' or 'chef'");
+    }
+
     return errors;
   }
 
@@ -121,11 +125,12 @@ class AuthController {
 
   register = async (req, res) => {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, role = "user" } = req.body;
       const validationErrors = this.validateRegistration({
         name,
         email,
         password,
+        role,
       });
 
       if (validationErrors.length > 0) {
@@ -144,7 +149,7 @@ class AuthController {
         });
       }
 
-      const user = new User({ name, email, password });
+      const user = new User({ name, email, password, role });
       await user.save();
 
       const accessToken = this.generateAccessToken(user._id);

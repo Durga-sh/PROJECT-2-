@@ -2,6 +2,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 class AuthAPI {
   async register(userData) {
     try {
+      console.log("Registration data:", userData); // Debug log
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: {
