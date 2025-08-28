@@ -6,7 +6,6 @@ require("dotenv").config();
 
 const authRoutes = require("./Routes/auth");
 
-
 const app = express();
 
 app.use(express.json());
@@ -15,11 +14,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
 
-    const allowedOrigins = [
-      process.env.CLIENT_URL,
-      "http://localhost:5173",
-      "https://lms-virid-one.vercel.app",
-    ].filter(Boolean);
+    const allowedOrigins = [process.env.CLIENT_URL].filter(Boolean);
 
     console.log(
       "CORS check - Origin:",
@@ -60,7 +55,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.options("*", cors(corsOptions));
+// Removed problematic options route - CORS middleware handles preflight automatically
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
@@ -126,7 +121,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.use("*", (req, res) => {
+// 404 handler - must be last middleware
+app.use((req, res) => {
   res.status(404).json({
     success: false,
     message: "Route not found",

@@ -7,10 +7,9 @@ import {
 } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import LeadManagementPage from "./pages/LeadManagementPage";
 import authAPI from "./api/auth";
 import { Loader2 } from "lucide-react";
-import { debugEnvironment } from "./utils/debug";
+
 
 const ProtectedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -100,10 +99,6 @@ const NotFoundPage = () => {
 };
 
 const App = () => {
-  if (import.meta.env.MODE === "production") {
-    debugEnvironment();
-  }
-
   return (
     <Router>
       <div className="App">
@@ -111,6 +106,7 @@ const App = () => {
           {/* Public Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/dashboard" element={<RegisterPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>

@@ -1,4 +1,4 @@
-const authController = require("../controller/authController");
+const authController = require("../controllers/authController");
 
 // Middleware to authenticate access token
 const authenticateToken = async (req, res, next) => {
@@ -112,6 +112,7 @@ const authenticateRefreshToken = async (req, res, next) => {
 };
 
 module.exports = {
+  authenticate: authenticateToken,
   authenticateToken,
   authenticateRefreshToken,
 };
