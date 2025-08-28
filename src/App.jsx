@@ -1,18 +1,19 @@
-import { Routes, Route } from 'react-router-dom'; 
-import Header from "./components/Header"; 
-import Home from "./pages/Home";
+import { Routes, Route } from "react-router-dom";
+import Register from "./pages/Register";
 import Login from "./pages/Login";
-import Registration from "./pages/Registration";
-import "./App.css";
+import ChefRegister from "./pages/ChefRegister";
+import Home from "./pages/Home";   
+import Header from "./components/Header"; 
 
 function App() {
   return (
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />   
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/Registration" element={<Registration />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/chef-register" element={<ChefRegister />} />
       </Routes>
     </>
   );

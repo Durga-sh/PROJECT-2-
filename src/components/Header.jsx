@@ -14,7 +14,7 @@ export default function Header() {
           <div className="text-2xl font-bold text-orange-600">Rasoi</div>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex space-x-8 items-center">
             <Link to="/" className="text-gray-700 hover:text-orange-600">
               Home
             </Link>
@@ -24,13 +24,24 @@ export default function Header() {
             <Link to="/services" className="text-gray-700 hover:text-orange-600">
               Services
             </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-orange-600">
-              Contact
+
+            {/* Sign In / Chef CTA buttons */}
+            <Link
+              to="/login"
+              className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition"
+            >
+              Sign In
+            </Link>
+            <Link
+              to="/chef-register"
+              className="bg-orange-100 text-orange-600 px-4 py-2 rounded-lg hover:bg-orange-200 transition border border-orange-400"
+            >
+              Join as a Chef
             </Link>
           </div>
 
-          {/* Profile + Mobile Menu Button */}
-          <div className="flex items-center gap-4">
+          {/* Profile (mobile only) + Menu Button */}
+          <div className="flex items-center gap-4 md:hidden">
             {/* Profile Button */}
             <div className="relative">
               <button
@@ -42,27 +53,32 @@ export default function Header() {
 
               {/* Dropdown Menu */}
               {profileOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-md">
+                <div className="absolute right-0 mt-2 w-44 bg-white border rounded-lg shadow-md">
                   <Link
                     to="/login"
-                    className="block px-4 py-2 text-gray-700 hover:bg-orange-100"
-                    onClick={() => setProfileOpen(false)} // closes dropdown
+                    className="block px-4 py-2 text-orange-600 hover:bg-orange-50 font-medium"
+                    onClick={() => setProfileOpen(false)}
                   >
-                    Login
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/chef-register"
+                    className="block px-4 py-2 text-orange-600 hover:bg-orange-50 font-medium"
+                    onClick={() => setProfileOpen(false)}
+                  >
+                    Join as a Chef
                   </Link>
                 </div>
               )}
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="text-gray-700 hover:text-orange-600"
-              >
-                {isOpen ? <X size={28} /> : <Menu size={28} />}
-              </button>
-            </div>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-gray-700 hover:text-orange-600"
+            >
+              {isOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
           </div>
         </div>
       </div>
@@ -91,12 +107,21 @@ export default function Header() {
           >
             Services
           </Link>
+
+          {/* Sign In / Chef CTA in Mobile */}
           <Link
-            to="/contact"
-            className="block text-gray-700 hover:text-orange-600"
+            to="/login"
+            className="block bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition text-center"
             onClick={() => setIsOpen(false)}
           >
-            Contact
+            Sign In
+          </Link>
+          <Link
+            to="/chef-register"
+            className="block bg-orange-100 text-orange-600 px-4 py-2 rounded-lg hover:bg-orange-200 transition border border-orange-400 text-center"
+            onClick={() => setIsOpen(false)}
+          >
+            Join as a Chef
           </Link>
         </div>
       )}
