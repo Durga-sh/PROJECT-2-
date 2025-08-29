@@ -25,7 +25,7 @@ const createPaymentOrder = async (req, res) => {
     const timestamp = Date.now().toString().slice(-8); // Last 8 digits of timestamp
     const orderIdShort = orderId.toString().slice(-8); // Last 8 characters of orderId
     const receipt = `ord_${orderIdShort}_${timestamp}`.slice(0, 40); // Ensure max 40 chars
-    
+
     const options = {
       amount: amount * 100, // Amount in paise
       currency: currency,

@@ -15,6 +15,7 @@ import {
   ChefHat,
   Sparkles,
   TrendingUp,
+  Package,
 } from "lucide-react";
 import CartModal from "../components/CartModal";
 import Footer from "../components/Footer";
@@ -186,6 +187,48 @@ const UserDashboard = () => {
         return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const getStatusColorEnhanced = (status) => {
+    switch (status) {
+      case "pending":
+        return "bg-gradient-to-r from-yellow-400 to-orange-500 text-white animate-pulse";
+      case "confirmed":
+        return "bg-gradient-to-r from-blue-500 to-blue-600 text-white";
+      case "preparing":
+        return "bg-gradient-to-r from-orange-500 to-red-500 text-white animate-pulse";
+      case "ready":
+        return "bg-gradient-to-r from-green-500 to-emerald-600 text-white animate-bounce";
+      case "out-for-delivery":
+        return "bg-gradient-to-r from-purple-500 to-pink-500 text-white animate-pulse";
+      case "delivered":
+        return "bg-gradient-to-r from-green-600 to-green-700 text-white";
+      case "cancelled":
+        return "bg-gradient-to-r from-red-500 to-red-600 text-white";
+      default:
+        return "bg-gradient-to-r from-gray-500 to-gray-600 text-white";
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "pending":
+        return "⏳ ";
+      case "confirmed":
+        return "✅ ";
+      case "preparing":
+        return "👨‍🍳 ";
+      case "ready":
+        return "🔔 ";
+      case "out-for-delivery":
+        return "🚚 ";
+      case "delivered":
+        return "✨ ";
+      case "cancelled":
+        return "❌ ";
+      default:
+        return "📦 ";
     }
   };
 
@@ -631,81 +674,200 @@ const UserDashboard = () => {
               </button>
             </div>
 
-            <div className="bg-white rounded-2xl shadow border border-gray-100">
+            <div className="bg-gradient-to-br from-white via-orange-50 to-red-50 rounded-2xl shadow-xl border border-white/20">
               <div className="p-6 sm:p-8">
                 {orders.length > 0 ? (
                   <div className="space-y-6">
                     {orders.map((order, index) => (
                       <div
                         key={order._id}
-                        className="bg-white/60 backdrop-blur-sm border border-white/20 rounded-xl p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                        style={{ animationDelay: `${index * 100}ms` }}
+                        className="relative bg-gradient-to-br from-white via-white to-orange-50/50 backdrop-blur-sm border border-orange-100 rounded-2xl p-6 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-[1.02] group overflow-hidden"
+                        style={{ animationDelay: `${index * 150}ms` }}
                       >
-                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-3 sm:space-y-0">
-                          <div className="space-y-1">
-                            <h4 className="font-bold text-gray-900 text-lg">
-                              Order #{order.orderNumber || order._id.slice(-6)}
-                            </h4>
-                            <p className="text-sm text-gray-600">
-                              {new Date(order.createdAt).toLocaleString()}
-                            </p>
-                            <p className="text-sm text-orange-700 font-medium">
-                              {order.orderType === "delivery"
-                                ? "🚚 Delivery"
-                                : "🏪 Pickup"}
-                            </p>
-                          </div>
-                          <div className="text-left sm:text-right">
-                            <p className="font-bold text-xl bg-orange-600 bg-clip-text text-transparent">
-                              ₹{order.totalAmount}
-                            </p>
-                            <span
-                              className={`inline-block px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(
-                                order.status
-                              )}`}
-                            >
-                              {order.status?.charAt(0).toUpperCase() +
-                                order.status?.slice(1)}
-                            </span>
-                          </div>
-                        </div>
+                        {/* Decorative background elements */}
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-200/30 to-transparent rounded-full -translate-y-16 translate-x-16 group-hover:scale-150 transition-transform duration-700"></div>
+                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-red-200/20 to-transparent rounded-full translate-y-12 -translate-x-12 group-hover:scale-125 transition-transform duration-700"></div>
 
-                        <div className="bg-white/40 rounded-lg p-4">
-                          <h5 className="text-sm font-semibold text-gray-700 mb-3">
-                            Items:
-                          </h5>
-                          <div className="space-y-2">
-                            {order.items?.map((item, idx) => (
-                              <div
-                                key={idx}
-                                className="flex justify-between text-sm bg-white/60 rounded-lg p-2"
-                              >
-                                <span className="font-medium">
-                                  {item.name} x {item.quantity}
+                        <div className="relative z-10">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 space-y-4 sm:space-y-0">
+                            <div className="space-y-2">
+                              <div className="flex items-center space-x-3">
+                                <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                  <ShoppingBag className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                  <h4 className="font-bold text-gray-900 text-xl group-hover:text-orange-700 transition-colors duration-300">
+                                    Order #
+                                    {order.orderNumber || order._id.slice(-6)}
+                                  </h4>
+                                  <p className="text-sm text-gray-600 font-medium">
+                                    {new Date(
+                                      order.createdAt
+                                    ).toLocaleDateString("en-US", {
+                                      weekday: "short",
+                                      year: "numeric",
+                                      month: "short",
+                                      day: "numeric",
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-3">
+                                <span
+                                  className={`inline-flex items-center px-4 py-2 text-sm font-semibold rounded-full shadow-md ${
+                                    order.orderType === "delivery"
+                                      ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                                      : "bg-gradient-to-r from-green-500 to-green-600 text-white"
+                                  }`}
+                                >
+                                  {order.orderType === "delivery" ? "🚚" : "🏪"}
+                                  {order.orderType === "delivery"
+                                    ? "Delivery"
+                                    : "Pickup"}
                                 </span>
-                                <span className="font-bold text-orange-700">
-                                  ₹{item.price * item.quantity}
+                                <span
+                                  className={`inline-flex items-center px-4 py-2 text-sm font-semibold rounded-full shadow-md ${
+                                    order.paymentMethod === "online"
+                                      ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white"
+                                      : order.paymentMethod === "upi"
+                                      ? "bg-gradient-to-r from-indigo-500 to-indigo-600 text-white"
+                                      : "bg-gradient-to-r from-gray-500 to-gray-600 text-white"
+                                  }`}
+                                >
+                                  {order.paymentMethod === "online"
+                                    ? "💳"
+                                    : order.paymentMethod === "upi"
+                                    ? "📱"
+                                    : "💵"}
+                                  {order.paymentMethod
+                                    ?.charAt(0)
+                                    .toUpperCase() +
+                                    order.paymentMethod?.slice(1)}
                                 </span>
                               </div>
-                            ))}
+                            </div>
+                            <div className="text-left sm:text-right space-y-3">
+                              <div className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                                <p className="font-black text-3xl">
+                                  ₹{order.totalAmount}
+                                </p>
+                              </div>
+                              <span
+                                className={`inline-flex items-center px-4 py-2 text-sm font-bold rounded-full shadow-lg transform hover:scale-105 transition-all duration-200 ${getStatusColorEnhanced(
+                                  order.status
+                                )}`}
+                              >
+                                {getStatusIcon(order.status)}
+                                {order.status?.charAt(0).toUpperCase() +
+                                  order.status?.slice(1)}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="bg-gradient-to-r from-white/80 to-orange-50/80 backdrop-blur-sm rounded-xl p-5 border border-orange-100/50 shadow-inner">
+                            <div className="flex items-center space-x-2 mb-4">
+                              <div className="w-8 h-8 bg-gradient-to-r from-orange-400 to-red-400 rounded-lg flex items-center justify-center">
+                                <Package className="w-4 h-4 text-white" />
+                              </div>
+                              <h5 className="text-lg font-bold text-gray-800">
+                                Order Items
+                              </h5>
+                              <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-semibold">
+                                {order.items?.length} items
+                              </span>
+                            </div>
+                            <div className="grid gap-3">
+                              {order.items?.map((item, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex items-center justify-between bg-white/70 backdrop-blur-sm rounded-lg p-3 border border-orange-100/30 hover:shadow-md transition-all duration-200 hover:bg-white/90"
+                                >
+                                  <div className="flex items-center space-x-3">
+                                    <div className="w-10 h-10 bg-gradient-to-r from-orange-300 to-red-300 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                                      {item.quantity}x
+                                    </div>
+                                    <div>
+                                      <span className="font-semibold text-gray-900 text-base">
+                                        {item.name}
+                                      </span>
+                                      <p className="text-sm text-gray-600">
+                                        ₹{item.price} each
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="text-right">
+                                    <span className="font-bold text-lg bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                                      ₹{item.price * item.quantity}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Order Summary */}
+                            <div className="mt-4 pt-4 border-t border-orange-200">
+                              <div className="flex justify-between items-center text-sm text-gray-600 mb-1">
+                                <span>Items Total:</span>
+                                <span>
+                                  ₹
+                                  {order.totalAmount -
+                                    (order.deliveryFee || 0) -
+                                    (order.tax || 0)}
+                                </span>
+                              </div>
+                              {order.deliveryFee > 0 && (
+                                <div className="flex justify-between items-center text-sm text-gray-600 mb-1">
+                                  <span>Delivery Fee:</span>
+                                  <span>₹{order.deliveryFee}</span>
+                                </div>
+                              )}
+                              {order.tax > 0 && (
+                                <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
+                                  <span>Tax:</span>
+                                  <span>₹{order.tax}</span>
+                                </div>
+                              )}
+                              <div className="flex justify-between items-center font-bold text-lg border-t border-orange-200 pt-2">
+                                <span className="text-gray-800">
+                                  Total Paid:
+                                </span>
+                                <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                                  ₹{order.totalAmount}
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-16">
-                    <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  <div className="text-center py-20 bg-gradient-to-br from-orange-50 via-white to-red-50 rounded-2xl border-2 border-dashed border-orange-200">
+                    <div className="relative">
+                      <div className="w-24 h-24 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                        <ShoppingBag className="w-12 h-12 text-white" />
+                      </div>
+                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2">
+                        <div className="w-6 h-6 bg-yellow-400 rounded-full animate-bounce"></div>
+                      </div>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
                       No orders yet
                     </h3>
-                    <p className="text-gray-500 mb-6">
-                      Start browsing menus to place your first order
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                      No orders yet
+                    </h3>
+                    <p className="text-gray-600 mb-8 text-lg">
+                      Start browsing menus to place your first order and enjoy
+                      delicious meals!
                     </p>
                     <button
                       onClick={() => setActiveTab("menus")}
-                      className="px-6 py-3 bg-orange-600 text-white font-semibold rounded-xl hover:bg-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                      className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold rounded-2xl hover:from-orange-700 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
                     >
+                      <Plus className="w-5 h-5 mr-2" />
                       Browse Menus
                     </button>
                   </div>
