@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { X, Plus, Minus, ShoppingCart, Trash2 } from "lucide-react";
 import orderAPI from "../api/order";
+import paymentAPI from "../api/payment";
 
 const CartModal = ({
   isOpen,
@@ -81,7 +82,7 @@ const CartModal = ({
         specialRequests: item.specialRequests || "",
       }));
 
-      // Create single order with all items
+      // Create order data
       const orderData = {
         items: orderItems,
         deliveryAddress: orderType === "delivery" ? deliveryAddress : undefined,
@@ -92,23 +93,60 @@ const CartModal = ({
         orderType,
       };
 
+      // Create order first
       const result = await orderAPI.createOrder(orderData);
 
       if (result.success) {
-        alert("Order placed successfully!");
-        clearCart();
-        onClose();
-        // Reset form
-        setOrderType("delivery");
-        setDeliveryAddress({
-          street: "",
-          area: "",
-          city: "",
-          pincode: "",
-          landmark: "",
-        });
-        setPaymentMethod("cash");
-        setCustomerNotes("");
+        const orderId = result.data._id;
+        const orderNumber = result.data.orderNumber;
+
+        // Handle payment based on method
+        if (paymentMethod === "online") {
+          // Load Razorpay script if not already loaded
+          if (!window.Razorpay) {
+            const script = document.createElement("script");
+            script.src = "https://checkout.razorpay.com/v1/checkout.js";
+            script.async = true;
+            document.body.appendChild(script);
+
+            await new Promise((resolve) => {
+              script.onload = resolve;
+            });
+          }
+
+          // Initiate Razorpay payment
+          await paymentAPI.initiateRazorpayPayment(
+            {
+              orderId,
+              orderNumber,
+              totalAmount,
+            },
+            {
+              onSuccess: (paymentData) => {
+                alert("Payment successful! Order placed successfully!");
+                clearCart();
+                onClose();
+                resetForm();
+              },
+              onError: (error) => {
+                alert(`Payment failed: ${error}`);
+                setLoading(false);
+              },
+              onDismiss: () => {
+                alert(
+                  "Payment cancelled. You can retry payment from order history."
+                );
+                setLoading(false);
+              },
+            }
+          );
+        } else {
+          // For cash/UPI payments, order is placed successfully
+          alert("Order placed successfully!");
+          clearCart();
+          onClose();
+          resetForm();
+        }
       } else {
         alert(`Order failed: ${result.message}`);
       }
@@ -116,8 +154,24 @@ const CartModal = ({
       console.error("Place order error:", error);
       alert("Failed to place order. Please try again.");
     } finally {
-      setLoading(false);
+      if (paymentMethod !== "online") {
+        setLoading(false);
+      }
     }
+  };
+
+  const resetForm = () => {
+    setOrderType("delivery");
+    setDeliveryAddress({
+      street: "",
+      area: "",
+      city: "",
+      pincode: "",
+      landmark: "",
+      contactNumber: "",
+    });
+    setPaymentMethod("online");
+    setCustomerNotes("");
   };
 
   if (!isOpen) return null;

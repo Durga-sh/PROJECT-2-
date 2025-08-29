@@ -7,6 +7,7 @@ require("dotenv").config();
 const authRoutes = require("./Routes/auth");
 const menuRoutes = require("./Routes/menu");
 const orderRoutes = require("./Routes/order");
+const paymentRoutes = require("./Routes/payment");
 const app = express();
 
 app.use(express.json());
@@ -91,6 +92,7 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/menu", menuRoutes);
 app.use("/api/order", orderRoutes);
+app.use("/api/payment", paymentRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "Backend is running" });
