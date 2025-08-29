@@ -10,6 +10,7 @@ import RegisterPage from "./pages/RegisterPage";
 import UserDashboard from "./pages/UserDashboard";
 import ChefDashboard from "./pages/ChefDashboard";
 import authAPI from "./api/auth";
+import Footer from "./components/Footer";
 import { Loader2 } from "lucide-react";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -113,7 +114,7 @@ const NotFoundPage = () => {
 const App = () => {
   return (
     <Router>
-      <div className="App">
+      <div className="App w-full min-h-screen">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<UserDashboard />} />

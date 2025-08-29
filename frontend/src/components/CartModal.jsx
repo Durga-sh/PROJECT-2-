@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import { useState } from "react";
 import { X, Plus, Minus, ShoppingCart, Trash2 } from "lucide-react";
 import orderAPI from "../api/order";
 

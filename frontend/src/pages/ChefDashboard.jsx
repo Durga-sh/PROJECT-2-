@@ -141,7 +141,7 @@ const ChefDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-white/20 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center transform hover:scale-110 transition-transform duration-200">
@@ -179,7 +179,7 @@ const ChefDashboard = () => {
 
       {/* Navigation Tabs */}
       <div className="bg-white/60 backdrop-blur-sm border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-8 overflow-x-auto">
             <button
               onClick={() => setActiveTab("dashboard")}
@@ -216,7 +216,7 @@ const ChefDashboard = () => {
       </div>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {activeTab === "dashboard" && (
           <div className="animate-fade-in">
             {/* Welcome Section */}
