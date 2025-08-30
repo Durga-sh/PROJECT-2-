@@ -123,7 +123,7 @@ const CartModal = ({
             },
             {
               onSuccess: (paymentData) => {
-                alert("Payment successful! Order placed successfully!");
+                alert("Payment successful! Order placed successfully!"+paymentData);
                 clearCart();
                 onClose();
                 resetForm();
