@@ -116,12 +116,10 @@ const App = () => {
     <Router>
       <div className="App w-full min-h-screen">
         <Routes>
-          {/* Public Routes */}
+   
           <Route path="/" element={<UserDashboard />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-
-          {/* Protected Dashboard Routes */}
           <Route
             path="/user-dashboard"
             element={

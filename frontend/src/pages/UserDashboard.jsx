@@ -22,6 +22,7 @@ import Footer from "../components/Footer";
 import authAPI from "../api/auth";
 import menuAPI from "../api/menu";
 import orderAPI from "../api/order";
+import { Link } from "react-router-dom";
 
 const UserDashboard = () => {
   const [user, setUser] = useState(null);
@@ -40,7 +41,6 @@ const UserDashboard = () => {
     if (typeof window !== "undefined") window.location.href = path;
   };
 
-  // All Food Categories filter chips
   const allCategories = [
     { key: "", label: "All" },
     { key: "indian", label: "Indian" },
@@ -170,7 +170,6 @@ const UserDashboard = () => {
 
   const getCartItemCount = () =>
     cart.reduce((total, item) => total + item.quantity, 0);
-
 
   const getStatusColorEnhanced = (status) => {
     switch (status) {
@@ -310,20 +309,20 @@ const UserDashboard = () => {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <a
-                    href="/login"
+                  <Link
+                    to="/login"
                     className="flex items-center gap-1 px-4 py-2 text-orange-700 hover:text-orange-800 transition-all duration-200 hover:bg-orange-50 rounded-lg"
                   >
                     <LogIn className="w-4 h-4" />
                     <span className="text-sm font-medium">Login</span>
-                  </a>
-                  <a
-                    href="/register"
+                  </Link>
+                  <Link
+                    to="/register"
                     className="flex items-center gap-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-all duration-200 transform hover:scale-105 shadow"
                   >
                     <UserPlus className="w-4 h-4" />
                     <span className="text-sm font-medium">Sign Up</span>
-                  </a>
+                  </Link>
                 </div>
               )}
             </div>
@@ -376,18 +375,18 @@ const UserDashboard = () => {
                   today to start your culinary journey!
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <a
-                    href="/register"
+                  <Link
+                    to="/register"
                     className="px-8 py-3 bg-white text-orange-700 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow"
                   >
                     Get Started
-                  </a>
-                  <a
-                    href="/login"
+                  </Link>
+                  <Link
+                    to="/login"
                     className="px-8 py-3 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-orange-700 transition-all duration-200 transform hover:scale-105"
                   >
                     Sign In
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -465,12 +464,12 @@ const UserDashboard = () => {
                         </p>
                       )}
                     </div>
-                    <a
-                      href="/login"
+                    <Link
+                      to="/login"
                       className="w-full inline-block py-3 px-4 bg-orange-600 text-white font-semibold rounded-xl hover:bg-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl text-center"
                     >
                       Login to Order
-                    </a>
+                    </Link>
                   </div>
                 ))}
               </div>
